@@ -1,23 +1,13 @@
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Map.Entry;
-import java.util.logging.Logger;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -25,11 +15,10 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class Indexer {
+public class Counter {
 
     private Workbook wb;
     private Sheet spreadsheet;
@@ -47,11 +36,11 @@ public class Indexer {
 
     // TODO
     // Organize output in order of occurances
-    // Support custom input from command line
     // Support custom input from specified file
-    // Command promopt interaction
+    // Build out rest of GUI 
     // Flesh out Spring configs
-    public Indexer() throws InvalidFormatException, IOException {
+    // Autowire up stuff
+    public Counter() throws InvalidFormatException, IOException {
         wb = new XSSFWorkbook();;
         spreadsheet = wb.createSheet("Indexed Words");
         spreadsheet.setColumnWidth(0, 6000);
