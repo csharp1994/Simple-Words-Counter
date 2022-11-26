@@ -32,7 +32,7 @@ public class GUI {
     private JButton customInputButton;
     private JLabel label;
 
-    private JTextField customInputField = new JTextField(10);
+    private JTextField customInputField = new JTextField();
     
     public GUI() throws InvalidFormatException, IOException {
         counter = new Counter();
@@ -94,6 +94,7 @@ public class GUI {
 
         frame.add(panel, BorderLayout.CENTER);
         frame.add(customInputField, BorderLayout.SOUTH);
+        customInputField.setText("Enter your custom text here...");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Simple Words Counter");
         frame.pack();
