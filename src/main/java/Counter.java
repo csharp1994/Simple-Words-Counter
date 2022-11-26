@@ -2,10 +2,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Map.Entry;  
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.Collections;  
+import java.util.Comparator;  
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -34,12 +38,6 @@ public class Counter {
 
     private List<String> excludedStrings = Arrays.asList(" ", "of", "the", "to", "and", "for");
 
-    // TODO
-    // Organize output in order of occurances
-    // Support custom input from specified file
-    // Build out rest of GUI 
-    // Flesh out Spring configs
-    // Autowire up stuff
     public Counter() throws InvalidFormatException, IOException {
         wb = new XSSFWorkbook();;
         spreadsheet = wb.createSheet("Indexed Words");
@@ -85,19 +83,38 @@ public class Counter {
             }
         }
 
+        // Sort results by value, decending
+        List<Entry<String, Integer>> list = new LinkedList<Entry<String, Integer>>(inputWordsMap.entrySet());
+        Collections.sort(list, new Comparator<Entry<String, Integer>>() {
+            public int compare(Entry<String, Integer> item1, Entry<String, Integer> item2) {
+                return item2.getValue().compareTo(item1.getValue());
+            }
+        });
+
+        // Secondarily sort by key, alphabetically
+        for (int i = 0; i < list.size(); i++) {
+            int currentValue = list.get(i).getValue();
+            int startIndex = i;
+            int endIndex = getEndIndexOfSameValueSubList(list, startIndex, currentValue);
+            Collections.sort(list.subList(startIndex, endIndex), new Comparator<Entry<String, Integer>>() {
+                public int compare(Entry<String, Integer> item1, Entry<String, Integer> item2) {
+                    return item1.getKey().compareTo(item2.getKey());
+                }
+            });
+        }
+
         // Write into spreadsheet object
-        Set<String> rows = inputWordsMap.keySet();
         rowCounter = spreadsheet.getLastRowNum() + 1;
 
-        for (String key : rows) {
+        for (Entry<String, Integer> entry : list) {
             Row row = spreadsheet.createRow(rowCounter++);
             int cellNum = 0;
 
             Cell wordCell = row.createCell(cellNum++);
-            wordCell.setCellValue(key);
+            wordCell.setCellValue(entry.getKey());
             wordCell.setCellStyle(contentStyle);
             Cell wordCountCell = row.createCell(cellNum++);
-            wordCountCell.setCellValue(inputWordsMap.get(key));
+            wordCountCell.setCellValue(entry.getValue());
             wordCell.setCellStyle(contentStyle);
         }
 
@@ -108,5 +125,16 @@ public class Counter {
         FileOutputStream outputStream = new FileOutputStream(fileLocation);
         wb.write(outputStream);
         wb.close();
+    }
+
+    private int getEndIndexOfSameValueSubList(List<Entry<String, Integer>> list, int startIndex, int value) {
+        int counter = startIndex;
+        for (; counter < list.size(); counter++) {
+            int currentValue = list.get(counter).getValue();
+            if (currentValue != value) {
+                return counter;
+            }
+        }
+        return counter;
     }
 }

@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+// TODO switch to html/css setup
+    // TODO build out more GUI
 public class GUI implements ActionListener {
 
     private JFrame frame;
@@ -25,7 +27,6 @@ public class GUI implements ActionListener {
     private JButton button;
     private JLabel label;
     
-    // TODO switch to html/css setup
     public GUI() {
         frame = new JFrame();
         panel = new JPanel();
