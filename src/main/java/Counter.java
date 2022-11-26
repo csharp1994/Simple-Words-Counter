@@ -40,7 +40,7 @@ public class Counter {
 
     public Counter() throws InvalidFormatException, IOException {
         wb = new XSSFWorkbook();;
-        spreadsheet = wb.createSheet("Indexed Words");
+        spreadsheet = wb.createSheet("Test");
         spreadsheet.setColumnWidth(0, 6000);
         spreadsheet.setColumnWidth(1, 6000);
         header = spreadsheet.createRow(0);
@@ -71,10 +71,14 @@ public class Counter {
         inputWordsMap = new HashMap<>();
     }
 
-    public void printIndex(String input) throws FileNotFoundException, IOException {
+    public String printIndex(String input, String title) throws FileNotFoundException, IOException {
         // Place words from input string into array
         input = input.trim();
         inputWordsArr = input.replaceAll("\\p{Punct}", "").toLowerCase().split("\\s+");
+
+        if (inputWordsArr[0].equals("")) {
+            return "Error: Input Is Empty";
+        }
         
         // Put each word into hashmap, counting number of occurances
         for (int i = 0; i < inputWordsArr.length; i++) {
@@ -105,7 +109,7 @@ public class Counter {
 
         // Write into spreadsheet object
         rowCounter = spreadsheet.getLastRowNum() + 1;
-
+ 
         for (Entry<String, Integer> entry : list) {
             Row row = spreadsheet.createRow(rowCounter++);
             int cellNum = 0;
@@ -120,11 +124,12 @@ public class Counter {
 
         File currDir = new File(".");
         String path = currDir.getAbsolutePath();
-        String fileLocation = path.substring(0, path.length() - 1) + "IndexedWords.xlsx";
+        String fileLocation = path.substring(0, path.length() - 1) + title + ".xlsx";
 
         FileOutputStream outputStream = new FileOutputStream(fileLocation);
         wb.write(outputStream);
-        wb.close();
+
+        return title + " Spreadsheet Created...";
     }
 
     private int getEndIndexOfSameValueSubList(List<Entry<String, Integer>> list, int startIndex, int value) {
