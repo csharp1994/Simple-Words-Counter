@@ -74,7 +74,7 @@ public class Counter {
     public String printIndex(String input, String title) throws FileNotFoundException, IOException {
         // Place words from input string into array
         input = input.trim();
-        inputWordsArr = input.replaceAll("\\p{Punct}", "").toLowerCase().split("\\s+");
+        inputWordsArr = input.replaceAll("\\p{Punct}", " ").toLowerCase().split("\\s+");
 
         if (inputWordsArr[0].equals("")) {
             return "Error: Input Is Empty";
