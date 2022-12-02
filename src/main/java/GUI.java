@@ -19,8 +19,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-// TODO switch to html/css setup
-// TODO build out more GUI
 public class GUI {
 
     private Counter counter;
